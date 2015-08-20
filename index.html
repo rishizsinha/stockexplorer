@@ -24,19 +24,23 @@
 	</head>
 
 	<body>
-		<div class="container content-container" style="margin-top:50px">
+		<div class="container content-container center" style="margin:50px auto">
 			<h1 id="apptitle" style="text-align:center">Stock Explorer</h1>
 		</div>
 
 
 		<div class="container content-container">
 			<div class="input-group center">
-				<input type="text" class="form-control" placeholder="Recipient's username" aria-describedby="basic-addon2">
+				<input type="text" class="form-control" placeholder="Stock Symbol" aria-describedby="basic-addon2">
+				<div class="input-group-btn">
+	                <button class="btn btn-default" type="submit" id="stockInput">Lookup!</button>
+	            </div>
 			</div>
 		</div>
 
-		<svg id="visualisation" width="1000" height="500"></svg>
+		
 
+		<svg id="visualisation" width="1000" height="500"></svg>
 
 	</body>
 </html>
