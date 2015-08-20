@@ -21,6 +21,7 @@
     	<script type="text/javascript" src="js/jquery.min.js"></script>
     	<script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
+		
 	</head>
 
 	<body>
@@ -31,14 +32,17 @@
 
 		<div class="container content-container">
 			<div class="input-group center">
-				<input type="text" class="form-control" placeholder="Stock Symbol" aria-describedby="basic-addon2">
+				<input type="text" class="form-control" placeholder="Stock Symbol" aria-describedby="basic-addon2" id="stockInput">
 				<div class="input-group-btn">
-	                <button class="btn btn-default" type="submit" id="stockInput">Lookup!</button>
+	                <button class="btn btn-default" type="submit" id="stockCheck">Lookup!</button>
 	            </div>
 			</div>
 		</div>
 
-		
+		<div id="test"></div>
+		<script type="text/javascript" src="js/stockexplorerdata.js"></script>
+
+
 
 		<svg id="visualisation" width="1000" height="500"></svg>
 
