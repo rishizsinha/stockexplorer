@@ -4,17 +4,17 @@ function xDomData(u) {
 
 	console.log(url);
 	var d;
-	// if ( /mode=native/.test(url)) {
+	if ( /mode=native/.test(url)) {
 		console.log("here");
 		d = $.get(url, function(data){
-			return data;
+			return data.responseText;
 		});
-	// } else {
-	// 	console.log("there");
-	// 	d = $.getJSON(url, function(data){
-	// 		return JSON.stringify(data, null, 2);
-	// 	});
-	// }
+	} else {
+		console.log("there");
+		d = $.getJSON(url, function(data){
+			return data;//JSON.stringify(data, null, 2);
+		});
+	}
 	return d;
 }
 
