@@ -1,7 +1,8 @@
 function xDomData(u) {
 	var proxy = 'php/ba-simple-proxy.php',
-		url = proxy + "?" + u;
+		url = proxy + "?url=" + u;
 
+	console.log(url);
 	var d;
 	// if ( /mode=native/.test(url)) {
 		console.log("here");
