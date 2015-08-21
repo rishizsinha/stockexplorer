@@ -4,7 +4,7 @@ function xDomData(u) {
 
 	if ( /mode=native/.test(url)) {
 		$.get(url, function(data){
-			return data.contents;
+			return data["contents"];
 		});
 	} else {
 		$.getJSON(url, function(data){
