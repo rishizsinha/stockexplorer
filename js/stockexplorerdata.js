@@ -1,5 +1,5 @@
 function xDomData(u) {
-	var proxy = '../php/ba-simple-proxy.php',
+	var proxy = 'php/ba-simple-proxy.php',
 		url = proxy + "?" + u;
 
 	if ( /mode=native/.test(url)) {
