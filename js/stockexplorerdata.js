@@ -2,15 +2,19 @@ function xDomData(u) {
 	var proxy = 'php/ba-simple-proxy.php',
 		url = proxy + "?" + u;
 
+	var d;
 	if ( /mode=native/.test(url)) {
-		$.get(url, function(data){
+		console.log("here");
+		d = $.get(url, function(data){
 			return data;
 		});
 	} else {
-		$.getJSON(url, function(data){
+		console.log("there");
+		d = $.getJSON(url, function(data){
 			return JSON.stringify(data, null, 2);
 		});
 	}
+	return d;
 }
 
 $.ajaxSetup({ cache: false });
@@ -20,9 +24,6 @@ $("#stockCheck").click(function() {
 	var symbol = "http://www.google.com/finance/historical?output=csv&q="+$("#stockInput").val();
 	console.log(symbol);
 	data = xDomData(symbol);
-	// d3.csv(symbol,function(csv){
-	// 	data = csv;
-	// });
 	console.log(data);
 });
 
