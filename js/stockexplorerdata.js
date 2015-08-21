@@ -3,17 +3,17 @@ function xDomData(u) {
 		url = proxy + "?" + u;
 
 	var d;
-	if ( /mode=native/.test(url)) {
+	// if ( /mode=native/.test(url)) {
 		console.log("here");
 		d = $.get(url, function(data){
 			return data;
 		});
-	} else {
-		console.log("there");
-		d = $.getJSON(url, function(data){
-			return JSON.stringify(data, null, 2);
-		});
-	}
+	// } else {
+	// 	console.log("there");
+	// 	d = $.getJSON(url, function(data){
+	// 		return JSON.stringify(data, null, 2);
+	// 	});
+	// }
 	return d;
 }
 
