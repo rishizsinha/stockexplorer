@@ -1,6 +1,6 @@
-function xDomData(url) {
+function xDomData(u) {
 	var proxy = '../php/ba-simple-proxy.php',
-		url = proxy + "?" + url.serialize();
+		url = proxy + "?" + u;
 
 	if ( /mode=native/.test(url)) {
 		$.get(url, function(data){
