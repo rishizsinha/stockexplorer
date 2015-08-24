@@ -1,3 +1,6 @@
+var cachedDataObj = [];
+var cachedData = [];
+var cachedNames = [];
 
 function xDomData(u) {
 	// set url for ajax call
@@ -11,16 +14,17 @@ function xDomData(u) {
 		async:false})
 	.done( function(data){
 		stockdata = data.contents
-		console.log(stockdata);
 	});
 	// return success result
 	return stockdata;
 }
 
+var abbr, symbol, data, jsondata;
 function dataGet() {
-	var symbol = "http%3A%2F%2Fwww.google.com%2Ffinance%2Fhistorical%3Foutput%3Dcsv%26q%3D"+$("#stockInput").val()+"&full_headers=1&full_status=1";
-	var data = xDomData(symbol).replace("Date","Time");
-	var jsondata = d3.csv.parse(data, function(d){
+	abbr = $("#stockInput").val();
+	symbol = "http%3A%2F%2Fwww.google.com%2Ffinance%2Fhistorical%3Foutput%3Dcsv%26q%3D"+abbr+"&full_headers=1&full_status=1";
+	data = xDomData(symbol).replace("Date","Time");
+	jsondata = d3.csv.parse(data, function(d){
 		var parseDate = d3.time.format("%d-%b-%y").parse;
 		return {
 		    date: parseDate(d[Object.keys(d)[0]]), // convert "Year" column to Date
@@ -30,16 +34,18 @@ function dataGet() {
 		    close: +d.Close
 		}
 	});
-	stockGraph(jsondata);
+	cachedData.push(jsondata);
+	cachedNames.push(abbr);
+	// console.log(cachedData);
+	stockGraph(cachedData,jsondata);
+	$("#enteredStocks").append("<div class=stockOption>"+abbr+"</div>");
 }
+
 
 $.ajaxSetup({ cache: false });
 
-// if ($("#stockCheck").is(':focus') {
-	
-// };
-
 $("#stockCheck").click(dataGet);
+$("#stockCheck").on('keydown', dataGet);
 
 
 

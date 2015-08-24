@@ -1,11 +1,22 @@
 .center {
 	margin: 0 auto;
+}
+
+/*body {
+	background-image: url("../img/bullbackgroundtransparent.jpg");
+}*/
+
+.stockOption {
+
 }	
+
+.stockOption:hover{
+	background-color: #F1F1F1;
+}
 
 #apptitle {
 	size: 20;
 }
-
 
 path { 
     stroke: blue;

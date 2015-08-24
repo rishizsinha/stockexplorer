@@ -34,7 +34,7 @@
 			<div class="input-group center">
 				<input type="text" class="form-control" placeholder="Stock Symbol" aria-describedby="basic-addon2" id="stockInput">
 				<div class="input-group-btn">
-	                <button class="btn btn-default" type="submit" id="stockCheck">Lookup!</button>
+	                <button class="btn btn-default" type="submit" id="stockCheck" onkeypress="lookup(event)">Lookup!</button>
 	            </div>
 			</div>
 		</div>
@@ -44,9 +44,9 @@
 		<script type="text/javascript" src="js/stockgrapher.js"></script>
 
 
-		<svg id="visualisation" width="1000" height="500"></svg>
+		<!-- <svg id="visualisation" width="1000" height="300"></svg> -->
 
-		<div id="stockCache" class="container content-container" id="test"></div>
+		<div id="enteredStocks" class="container content-container"></div>
 
 	</body>
 </html>
