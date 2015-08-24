@@ -2,19 +2,21 @@
 	margin: 0 auto;
 }	
 
-#backgroundimgwrapper {
-	width:100%;
-
-}
-
-#backgroundimgwrapper::after {
-	content:"";
-	background-image: url("http://i238.photobucket.com/albums/ff305/rock_leonine/Pics%20for%20blog/stock_bull.jpg");
-	background-size: 100% 100%;
-	background-repeat: no-repeat;
-	opacity: 0.6;
-}
-
 #apptitle {
 	size: 20;
+}
+
+
+path { 
+    stroke: blue;
+    stroke-width: 2;
+    fill: none;
+}
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: gray;
+    stroke-width: 1;
+    shape-rendering: crispEdges;
 }

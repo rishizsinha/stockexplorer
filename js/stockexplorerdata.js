@@ -1,39 +1,45 @@
 
 function xDomData(u) {
-	console.log("--- CROSS DOMAIN CALL ---")
+	// set url for ajax call
 	var proxy = '../php/ba-simple-proxy.php',
 		url = proxy + "?url=" + u;
-	console.log("url called: " + url);
-	var d;
-	// if ( /mode=native/.test(url)) {
-	// 	console.log("here");
-	// 	d = $.get(url, function(data){
-	// 		return data.responseText;
-	// 	});
-	// } else {
+	// perform ajax call and store data when completed
+	var stockdata;
 	$.ajax({
 		url:url,
 		type:"POST",
-		async:false}).done( function(data){
-		//t = JSON.stringify(data, null, 2);
-		$("#test").text(JSON.stringify(data.contents, null, 2));
-		d = JSON.stringify(data.contents, null, 2)
+		async:false})
+	.done( function(data){
+		stockdata = data.contents
+		console.log(stockdata);
 	});
-	// }
-	return d;
+	// return success result
+	return stockdata;
+}
+
+function dataGet() {
+	var symbol = "http%3A%2F%2Fwww.google.com%2Ffinance%2Fhistorical%3Foutput%3Dcsv%26q%3D"+$("#stockInput").val()+"&full_headers=1&full_status=1";
+	var data = xDomData(symbol).replace("Date","Time");
+	var jsondata = d3.csv.parse(data, function(d){
+		var parseDate = d3.time.format("%d-%b-%y").parse;
+		return {
+		    date: parseDate(d[Object.keys(d)[0]]), // convert "Year" column to Date
+		    high: +d.High,
+		    low: +d.Low,
+		    open: +d.Open, // convert "Length" column to number
+		    close: +d.Close
+		}
+	});
+	stockGraph(jsondata);
 }
 
 $.ajaxSetup({ cache: false });
 
-$("#stockCheck").click(function() {
-	var symbol = "http%3A%2F%2Fwww.google.com%2Ffinance%2Fhistorical%3Foutput%3Dcsv%26q%3D"+$("#stockInput").val()+"&full_headers=1&full_status=1";
-	var data = xDomData(symbol);
-	console.log(data);
-	var jsondata = d3.csv.parse(data);
-	console.log(d3.csv.parse(data));
-	console.log(d3.csv.parse("Year,Make,Model,Length\n1997,Ford,E350,2.34\n2000,Mercury,Cougar,2.3\n"));
+// if ($("#stockCheck").is(':focus') {
+	
+// };
 
-});
+$("#stockCheck").click(dataGet);
 
 
 
