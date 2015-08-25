@@ -39,32 +39,31 @@ function arrayfn(fn, data, attr) {
     });
 }
 
-called = false;
+var now = new Date();
+var yrago = new Date().setFullYear(now.getFullYear()-1);
+x.domain([yrago, now]);
+y.domain([0, 400]);
+
+svg.append("g")
+    .attr("class", "xaxis")
+    .attr("transform", "translate(0," + height + ")")
+    .call(xAxis);
+
+// Add the Y Axis
+svg.append("g")
+    .attr("class", "yaxis")
+    .call(yAxis);
+
+svg.selectAll(".xaxis text")  // select all the text elements for the xaxis
+  .attr("transform", function(d) {
+      return "translate(" + this.getBBox().height*-2 + "," + this.getBBox().height + ")rotate(-45)";
+});
+
 // Get the data
 function stockGraph(data,curData,abbr) {
     // Scale the range of the data
     x.domain([arrayfn(d3.min,data,"date"), arrayfn(d3.max,data,"date")]);
     y.domain([0, arrayfn(d3.max,data,"close")]);
-
-    if (!called) {
-        // Add the X Axis
-        svg.append("g")
-            .attr("class", "xaxis")
-            .attr("transform", "translate(0," + height + ")")
-            .call(xAxis);
-
-        // Add the Y Axis
-        svg.append("g")
-            .attr("class", "yaxis")
-            .call(yAxis);
-
-        svg.selectAll(".xaxis text")  // select all the text elements for the xaxis
-          .attr("transform", function(d) {
-              return "translate(" + this.getBBox().height*-2 + "," + this.getBBox().height + ")rotate(-45)";
-        });  
-
-        called=true;
-    }
 
     // Add the new path.
     svg.append("path")

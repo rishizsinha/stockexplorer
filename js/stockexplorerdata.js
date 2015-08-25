@@ -21,12 +21,17 @@ function xDomData(u) {
 	return stockdata;
 }
 
+function assert(condition, message) {
+    if (!condition) {
+        throw message || "Assertion failed";
+    }
+}
+
 function stockToggle(abbr) {
 	return function() {
 		if ($(this).hasClass("btn-success")) {
 			removeData(abbr);
 			$(this).removeClass("btn-success").addClass("btn-danger");
-
 		} else {
 			addData(abbr);
 			$(this).removeClass("btn-danger").addClass("btn-success");
@@ -34,9 +39,27 @@ function stockToggle(abbr) {
 	};
 }
 
+function delData(abbr) {
+	return function() {
+		var ind = cachedNames.indexOf(abbr);
+		if (ind > -1) {
+			cachedNames.splice(ind, 1);
+	    	cachedData.splice(ind,1);
+		} else {
+			ind = removedNames.indexOf(abbr);
+			removedNames.splice(ind, 1);
+	    	removedData.splice(ind,1);
+		}
+		$("#"+abbr+"Group").remove()
+	}
+}
+
 var abbr, symbol, data, jsondata;
 function dataGet() {
 	abbr = $("#stockInput").val().toUpperCase();
+	if (cachedNames.indexOf(abbr) > -1 || removedNames.indexOf(abbr) > -1) {
+		return;
+	}
 	symbol = "http%3A%2F%2Fwww.google.com%2Ffinance%2Fhistorical%3Foutput%3Dcsv%26q%3D"+abbr+"&full_headers=1&full_status=1";
 	data = xDomData(symbol).replace("Date","Time");
 	jsondata = d3.csv.parse(data, function(d){
@@ -53,9 +76,9 @@ function dataGet() {
 	cachedData.push(jsondata);
 	cachedNames.push(abbr);
 	stockGraph(cachedData,jsondata);
-	$("#enteredStocks").append(//"<div class='col-md-2' id="+abbr+"Label>"+abbr+"</div>");
-		"<button type='button' class='col-md-2 btn btn-success' id="+abbr+"Label>"+abbr+"</button>");
+	$("#enteredStocks").append("<div class='btn-group' id="+abbr+"Group role='group'><button type='button' class='btn btn-default' id="+abbr+"Remove>X</button><button type='button' class='btn btn-success' id="+abbr+"Label>"+abbr+"</button></div>");
 	$("#"+abbr+"Label").click(stockToggle(abbr));
+	$("#"+abbr+"Remove").click(delData(abbr));
 }
 
 function removeData(abbr) {
