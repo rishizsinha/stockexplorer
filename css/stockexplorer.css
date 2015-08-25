@@ -6,12 +6,16 @@
 	background-image: url("../img/bullbackgroundtransparent.jpg");
 }*/
 
-.stockOption {
+.stockOptionOn {
+	background-color: green;
+}
 
-}	
+.btn {
+	margin: 5px;
+}
 
-.stockOption:hover{
-	background-color: #F1F1F1;
+.stockOptionOff {
+	background-color: gray;
 }
 
 #apptitle {
