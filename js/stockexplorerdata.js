@@ -51,6 +51,7 @@ function delData(abbr) {
 	    	removedData.splice(ind,1);
 		}
 		$("#"+abbr+"Group").remove()
+		removeStockGraph(cachedData, abbr);
 	}
 }
 
@@ -75,7 +76,7 @@ function dataGet() {
 	});
 	cachedData.push(jsondata);
 	cachedNames.push(abbr);
-	stockGraph(cachedData,jsondata);
+	addNewStockGraph(cachedData,jsondata,abbr);
 	$("#enteredStocks").append("<div class='btn-group' id="+abbr+"Group role='group'><button type='button' class='btn btn-default' id="+abbr+"Remove>X</button><button type='button' class='btn btn-success' id="+abbr+"Label>"+abbr+"</button></div>");
 	$("#"+abbr+"Label").click(stockToggle(abbr));
 	$("#"+abbr+"Remove").click(delData(abbr));
@@ -92,6 +93,7 @@ function removeData(abbr) {
 	} else {
 		console.log(abbr+" not found");
 	}
+	removeStockGraph(cachedData, abbr);
 }
 
 function addData(abbr) {
@@ -105,6 +107,7 @@ function addData(abbr) {
 	} else {
 		console.log(abbr+" not found");
 	}
+	addNewStockGraph(cachedData, cachedData[cachedNames.indexOf(abbr)], abbr);
 }
 
 

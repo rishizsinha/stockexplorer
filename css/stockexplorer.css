@@ -22,8 +22,13 @@
 	size: 20;
 }
 
+#graphDiv {
+	height: 450px;
+	width: 700px;
+}
+
 path { 
-    stroke: blue;
+    stroke: black;
     stroke-width: 2;
     fill: none;
 }

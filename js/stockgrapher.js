@@ -1,7 +1,7 @@
 // Set the dimensions of the canvas / graph
-var margin = {top: 30, right: 20, bottom: 60, left: 50},
-    width = 600 - margin.left - margin.right,
-    height = 300 - margin.top - margin.bottom;
+var margin = {top: 30, right: 20, bottom: 80, left: 70},
+    width = 700 - margin.left - margin.right,
+    height = 450 - margin.top - margin.bottom;
 
 // Set the ranges
 var x = d3.time.scale().range([0, width]);
@@ -23,7 +23,7 @@ var valueline = d3.svg.line()
     .y(function(d) { return y(d.close); });
     
 // Adds the svg canvas
-var svg = d3.select("#graphdiv")
+var svg = d3.select("#graphDiv")
     .append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
@@ -59,20 +59,22 @@ svg.selectAll(".xaxis text")  // select all the text elements for the xaxis
       return "translate(" + this.getBBox().height*-2 + "," + this.getBBox().height + ")rotate(-45)";
 });
 
+// now add titles to the axes
+svg.append("text")
+    .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
+    .attr("transform", "translate("+ "-50" +","+(height/2)+")rotate(-90)")  // text is drawn off the screen top left, move down and out and rotate
+    .text("Stock Price");
+
+svg.append("text")
+    .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
+    .attr("transform", "translate("+ (width/2) +","+height+2+")")  // centre below axis
+    .text("Date");
+
 // Get the data
-function stockGraph(data,curData,abbr) {
+function refresh(data) {
     // Scale the range of the data
     x.domain([arrayfn(d3.min,data,"date"), arrayfn(d3.max,data,"date")]);
     y.domain([0, arrayfn(d3.max,data,"close")]);
-
-    // Add the new path.
-    svg.append("path")
-        .attr("class", "line")
-        .attr("id", abbr+"line")
-        .attr("d", valueline(curData))
-        .style("stroke", function(){
-            return '#'+Math.floor(Math.random()*16777215).toString(16);
-        });
 
     // Update
     svg.select(".yaxis")
@@ -84,3 +86,22 @@ function stockGraph(data,curData,abbr) {
         .attr("d", valueline);
 
 };
+
+function addNewStockGraph(data, curData, abbr) {
+    // Add the new path.
+    svg.append("path")
+        .attr("class", "line")
+        .attr("id", abbr+"Line")
+        .attr("d", valueline(curData))
+        .style("stroke", function(){
+            return '#'+Math.floor(Math.random()*16777215).toString(16);
+        });
+
+    refresh(data);
+}
+
+function removeStockGraph(data, abbr) {
+    console.log("exec");
+    d3.select("#"+abbr+"Line").remove();
+    refresh(data);
+}
