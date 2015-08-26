@@ -1,32 +1,35 @@
+/** 
+ *	GENERAL UTILITIES
+ */
 .center {
 	margin: 0 auto;
 }
 
-/*body {
-	background-image: url("../img/bullbackgroundtransparent.jpg");
-}*/
+svg {
+  pointer-events: all;
+}
 
-.stockOptionOn {
-	background-color: green;
+/**
+ *	EXPLICIT ELEMENT STYLINGS
+ */
+
+ #apptitle {
+	size: 20;
+}
+
+ #graphDiv {
+	height: 450px;
+	width: 700px;
+	padding:0;
 }
 
 .btn-group {
 	margin: 5px 10px;
 }
 
-.stockOptionOff {
-	background-color: gray;
-}
-
-#apptitle {
-	size: 20;
-}
-
-#graphDiv {
-	height: 450px;
-	width: 700px;
-}
-
+/**
+ *	STATIC GRAPH STYLING
+ */
 path { 
     stroke: black;
     stroke-width: 2;
@@ -40,3 +43,96 @@ path {
     stroke-width: 1;
     shape-rendering: crispEdges;
 }
+
+/**********
+*  Line chart
+*/
+
+.point-paths path {
+  /*
+  fill: #eee;
+  stroke: #aaa;
+  */
+  stroke-opacity: 0;
+  fill-opacity: 0;
+}
+
+
+.lines path {
+  fill: none;
+  stroke-width: 1.5px;
+  stroke-linecap: round;
+
+  transition: stroke-width 250ms linear;
+  -moz-transition: stroke-width 250ms linear;
+  -webkit-transition: stroke-width 250ms linear;
+
+  transition-delay: 250ms
+  -moz-transition-delay: 250ms;
+  -webkit-transition-delay: 250ms;
+}
+
+.line.hover path {
+  stroke-width: 6px;
+}
+
+.lines .point {
+  transition: stroke-width 250ms linear;
+  -moz-transition: stroke-width 250ms linear;
+  -webkit-transition: stroke-width 250ms linear;
+}
+
+.lines .point.hover {
+  stroke-width: 20px;
+  stroke-opacity: .5;
+}
+
+/**
+ *	DYNAMIC GRAPH STYLING
+ */
+
+
+.hover-line { 
+  stroke: black;  
+  fill: none;
+  stroke-width: 1px;
+}
+/*
+.focus circle {
+  fill: black;
+  stroke: #91C241;
+}
+*/
+
+
+
+
+.d3-tip {
+  line-height: 1;
+  font-weight: bold;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  border-radius: 2px;
+}
+
+/* Creates a small triangle extender for the tooltip */
+.d3-tip:after {
+  box-sizing: border-box;
+  display: inline;
+  font-size: 10px;
+  width: 100%;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.8);
+  content: "\25BC";
+  position: absolute;
+  text-align: center;
+}
+
+/* Style northward tooltips differently */
+.d3-tip.n:after {
+  margin: -1px 0 0 0;
+  top: 100%;
+  left: 0;
+}
+

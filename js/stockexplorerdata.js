@@ -74,6 +74,7 @@ function dataGet() {
 		    stock: abbr
 		}
 	});
+	var color = '#'+Math.floor(Math.random()*16777215).toString(16);
 	cachedData.push(jsondata);
 	cachedNames.push(abbr);
 	addNewStockGraph(cachedData,jsondata,abbr);

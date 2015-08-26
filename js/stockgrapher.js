@@ -2,11 +2,9 @@
 var margin = {top: 30, right: 20, bottom: 80, left: 70},
     width = 700 - margin.left - margin.right,
     height = 450 - margin.top - margin.bottom;
-
 // Set the ranges
 var x = d3.time.scale().range([0, width]);
 var y = d3.scale.linear().range([height, 0]);
-
 // Define the axes
 var xAxis = d3.svg.axis().scale(x)
     .orient("bottom")
@@ -23,11 +21,11 @@ var valueline = d3.svg.line()
     .y(function(d) { return y(d.close); });
     
 // Adds the svg canvas
-var svg = d3.select("#graphDiv")
+var svgMain = d3.select("#graphDiv")
     .append("svg")
         .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-    .append("g")
+        .attr("height", height + margin.top + margin.bottom);
+var svg = svgMain.append("g")
         .attr("transform", 
               "translate(" + margin.left + "," + margin.top + ")");
 
@@ -64,11 +62,6 @@ svg.append("text")
     .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
     .attr("transform", "translate("+ "-50" +","+(height/2)+")rotate(-90)")  // text is drawn off the screen top left, move down and out and rotate
     .text("Stock Price");
-
-svg.append("text")
-    .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
-    .attr("transform", "translate("+ (width/2) +","+height+2+")")  // centre below axis
-    .text("Date");
 
 // Get the data
 function refresh(data) {
