@@ -21,12 +21,6 @@ function xDomData(u) {
 	return stockdata;
 }
 
-function assert(condition, message) {
-    if (!condition) {
-        throw message || "Assertion failed";
-    }
-}
-
 function stockToggle(abbr) {
 	return function() {
 		if ($(this).hasClass("btn-success")) {
@@ -37,22 +31,6 @@ function stockToggle(abbr) {
 			$(this).removeClass("btn-danger").addClass("btn-success");
 		}
 	};
-}
-
-function delData(abbr) {
-	return function() {
-		var ind = cachedNames.indexOf(abbr);
-		if (ind > -1) {
-			cachedNames.splice(ind, 1);
-	    	cachedData.splice(ind,1);
-		} else {
-			ind = removedNames.indexOf(abbr);
-			removedNames.splice(ind, 1);
-	    	removedData.splice(ind,1);
-		}
-		$("#"+abbr+"Group").remove()
-		removeStockGraph(cachedData, abbr);
-	}
 }
 
 var abbr, symbol, data, jsondata;
@@ -77,8 +55,8 @@ function dataGet() {
 	var color = '#'+Math.floor(Math.random()*16777215).toString(16);
 	cachedData.push(jsondata);
 	cachedNames.push(abbr);
+	$("#enteredStocks").append("<div class='btn-group' graphColor="+color+" id="+abbr+"Group role='group'><button type='button' class='btn btn-default' id="+abbr+"Remove>X</button><button type='button' class='btn btn-success' id="+abbr+"Label>"+abbr+"</button></div>");
 	addNewStockGraph(cachedData,jsondata,abbr);
-	$("#enteredStocks").append("<div class='btn-group' id="+abbr+"Group role='group'><button type='button' class='btn btn-default' id="+abbr+"Remove>X</button><button type='button' class='btn btn-success' id="+abbr+"Label>"+abbr+"</button></div>");
 	$("#"+abbr+"Label").click(stockToggle(abbr));
 	$("#"+abbr+"Remove").click(delData(abbr));
 }
@@ -96,7 +74,6 @@ function removeData(abbr) {
 	}
 	removeStockGraph(cachedData, abbr);
 }
-
 function addData(abbr) {
 	console.log("add activated for "+abbr);
 	var ind = removedNames.indexOf(abbr);
@@ -109,6 +86,21 @@ function addData(abbr) {
 		console.log(abbr+" not found");
 	}
 	addNewStockGraph(cachedData, cachedData[cachedNames.indexOf(abbr)], abbr);
+}
+function delData(abbr) {
+	return function() {
+		var ind = cachedNames.indexOf(abbr);
+		if (ind > -1) {
+			cachedNames.splice(ind, 1);
+	    	cachedData.splice(ind,1);
+		} else {
+			ind = removedNames.indexOf(abbr);
+			removedNames.splice(ind, 1);
+	    	removedData.splice(ind,1);
+		}
+		$("#"+abbr+"Group").remove()
+		removeStockGraph(cachedData, abbr);
+	}
 }
 
 

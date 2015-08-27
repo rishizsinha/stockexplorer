@@ -81,14 +81,28 @@ function refresh(data) {
 };
 
 function addNewStockGraph(data, curData, abbr) {
+    var color = $("#"+abbr+"Group").attr("graphColor");
     // Add the new path.
     svg.append("path")
         .attr("class", "line")
         .attr("id", abbr+"Line")
         .attr("d", valueline(curData))
         .style("stroke", function(){
-            return '#'+Math.floor(Math.random()*16777215).toString(16);
+            return color;
         });
+    // Add indv focus
+    var focus = svg.append("g")
+        .attr("class", "focus")
+        .attr("id", abbr+"Focus")
+        .style("display","none");
+        //.style("display", "none");
+    focus.append("circle")
+        .attr("r", 4)
+        .attr("fill",color)
+        .attr("stroke",color);
+    focus.append("text")
+       .attr("x", 9)
+       .attr("dy", ".35em");
 
     refresh(data);
 }
@@ -96,5 +110,6 @@ function addNewStockGraph(data, curData, abbr) {
 function removeStockGraph(data, abbr) {
     console.log("exec");
     d3.select("#"+abbr+"Line").remove();
+    d3.select("#"+abbr+"Focus").remove();
     refresh(data);
 }
