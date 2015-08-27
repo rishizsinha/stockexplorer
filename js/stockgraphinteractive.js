@@ -1,8 +1,11 @@
 // var dispatch = d3.dispatch('legendClick', 'legendMouseover', 'legendMouseout');
 
-function hoverLineCalc(obj) {
-    return d3.mouse(obj)[0]-margin.left-16.5;
+function graphPosX(obj) {
+  return d3.mouse(obj)[0]-margin.left;
 }  
+function graphPosY(obj) {
+  return d3.mouse(obj)[1]-margin.top;
+}
 
 // add a 'hover' line that we'll show as a user moves their mouse (or finger)
 // so we can use it to show detailed values of each line
@@ -13,43 +16,29 @@ hoverLine = hoverLineGroup
   .append("svg:line")
     .attr("x1", 10).attr("x2", 10) // vertical line so same value on each
     .attr("y1", 0).attr("y2", height); // top to bottom  
-    
 // hide it by default
 hoverLine.classed("hide", true);
 
 var handleMouseOverGraph = function(obj) {  
-  var mouseX = d3.mouse(obj)[0]-margin.left;
-  var mouseY = d3.mouse(obj)[1]-margin.top;
-  //console.log("("+mouseX+","+mouseY+")");
-
-  //debug("MouseOver graph [" + containerId + "] => x: " + mouseX + " y: " + mouseY + "  height: " + h + " event.clientY: " + event.clientY + " offsetY: " + event.offsetY + " pageY: " + event.pageY + " hoverLineYOffset: " + hoverLineYOffset)
+  var mouseX = graphPosX(obj);
+  var mouseY = graphPosY(obj);
   if(mouseX >= 0 && mouseX <= width && mouseY >= 0 && mouseY <= height) {
-
-    console.log("true");
     // show the hover line
     hoverLine.classed("hide", false);
-
     // set position of hoverLine
     hoverLine.attr("x1", mouseX).attr("x2", mouseX)
-    
     //displayValueLabelsForPositionX(mouseX)
-    
     // user is interacting
     userCurrentlyInteracting = true;
     currentUserPositionX = mouseX;
   } else {
     // proactively act as if we've left the area since we're out of the bounds we want
-    handleMouseOutGraph(event)
+    handleMouseOutGraph(obj)
   }
 }
-
-
 var handleMouseOutGraph = function(obj) { 
   // hide the hover-line
   hoverLine.classed("hide", true);
-    
-  //debug("MouseOut graph [" + containerId + "] => " + mouseX + ", " + mouseY)
-  
   // user is no longer interacting
   userCurrentlyInteracting = false;
   currentUserPositionX = -1;
@@ -58,9 +47,11 @@ var handleMouseOutGraph = function(obj) {
 d3.select("#graphDiv")
     .on("mouseover", function() { 
         handleMouseOverGraph(this);
+        mousemove(this);
     })
     .on("mousemove", function() { 
         handleMouseOverGraph(this);
+        mousemove(this);
     })
     .on("mouseout", function() {
       handleMouseOutGraph(this);
@@ -86,19 +77,18 @@ d3.select("#graphDiv")
 //                     .attr("y1", 0).attr("y2", height);
 //                     //.style("display", "none");
 
-// var bisectDate = d3.bisector(function(d) { return d.date; }).left,
-//     formatValue = d3.format(",.2f"),
-//     formatCurrency = function(d) { return "$" + formatValue(d); };
+var bisectDate = d3.bisector(function(d) { return d.date; }).left,
+    formatValue = d3.format(",.2f"),
+    formatCurrency = function(d) { return "$" + formatValue(d); };
 
-// var focus = svg.append("g")
-//     .attr("class", "focus")
-//     .style("display", "none");
-// focus.append("circle")
-//     .attr("r", 4);
-// focus.append("text")
-//    .attr("x", 9)
-//    .attr("dy", ".35em");
-
+var focus = svg.append("g")
+    .attr("class", "focus");
+    //.style("display", "none");
+focus.append("circle")
+    .attr("r", 4);
+focus.append("text")
+   .attr("x", 9)
+   .attr("dy", ".35em");
 
 // d3.select("#graphDiv")
 //     .on("mouseover", function() { 
@@ -120,14 +110,14 @@ d3.select("#graphDiv")
 //     });
 
 function mousemove(obj) {
-    var x0 = x.invert(d3.mouse(obj)[0]-margin.left);
-    console.log(x0);
-    // var x0 = x.invert(d3.mouse(this)[0]),
-    //     i = bisectDate(cachedData, x0, 1),
-    //     d0 = cachedData[i - 1],
-    //     d1 = cachedData[i],
-    //     d = x0 - d0.date > d1.date - x0 ? d1 : d0;
-    // console.log(x0);
-    // focus.attr("transform", "translate(" + x(d.date) + "," + y(d.close) + ")");
-    // focus.select("text").text(formatCurrency(d.close));
+    var x0 = x.invert(graphPosX(obj)),
+        i = bisectDate(cachedData[0], x0),
+        d0 = cachedData[0][i - 1],
+        d1 = cachedData[0][i],
+        d = x0 - d0.date > d1.date - x0 ? d1 : d0;
+    console.log("d0: "+d0.date+"\nd1: "+d1.date+"\nd: "+d.date);
+    focus.select("circle")
+        .attr("transform",
+              "translate(" + x(d.date) + "," +
+                y(d.close) + ")");
 }

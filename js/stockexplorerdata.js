@@ -73,7 +73,7 @@ function dataGet() {
 		    close: +d.Close,
 		    stock: abbr
 		}
-	});
+	}).reverse();
 	var color = '#'+Math.floor(Math.random()*16777215).toString(16);
 	cachedData.push(jsondata);
 	cachedNames.push(abbr);
