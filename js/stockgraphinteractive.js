@@ -31,6 +31,7 @@ var handleMouseOverGraph = function(obj) {
     d3.selectAll("g.focus")
       .style("display",null);
     moveFocii(obj);
+    tip.show;
     //displayValueLabelsForPositionX(mouseX)
     // user is interacting
     userCurrentlyInteracting = true;
@@ -44,7 +45,8 @@ var handleMouseOutGraph = function(obj) {
   // hide the hover-line
   hoverLine.classed("hide", true);
   d3.selectAll("g.focus")
-        .style("display","none");
+    .style("display","none");
+  tip.hide;
   // user is no longer interacting
   userCurrentlyInteracting = false;
   currentUserPositionX = -1;
@@ -60,60 +62,26 @@ d3.select("#graphDiv")
     .on("mouseout", function() {
       handleMouseOutGraph(this);
     });
+d3.select("path")
+  .on("mouseover", function() {
+    console.log("path!");
+  })
 
-
-// var tip = d3.tip()
-//   .attr('class', 'd3-tip')
-//   .attr('id','tooltips')
-//   .offset([20, 0])
-//   .html(function(d) {
-//     console.log('TRYING');
-//     return "<strong>Frequency:</strong> <span style='color:red'>" + d.close + "</span>";
-//   })
-// svg.call(tip);
-
-// Hover line. 
-// var hoverLineGroup = svg.append("g")
-//                     .attr("class", "hover-line");
-// var hoverLine = hoverLineGroup.append("line")
-//                     .attr("id","hoverLine")
-//                     .attr("x1", 10).attr("x2", 10) 
-//                     .attr("y1", 0).attr("y2", height);
-//                     //.style("display", "none");
+var tip = d3.tip()
+  .attr('class', 'd3-tip')
+  .attr('id','tooltips')
+  .offset([20, 0])
+  .html(function(d) {
+    console.log('TRYING');
+    return d.date;
+  })
+svg.call(tip);
 
 var bisectDate = d3.bisector(function(d) { return d.date; }).left,
     formatValue = d3.format(",.2f"),
     formatCurrency = function(d) { return "$" + formatValue(d); };
 
-// var focus = svg.append("g")
-//     .attr("class", "focus");
-//     //.style("display", "none");
-// focus.append("circle")
-//     .attr("r", 4);
-// focus.append("text")
-//    .attr("x", 9)
-//    .attr("dy", ".35em");
-
-// d3.select("#graphDiv")
-//     .on("mouseover", function() { 
-//         focus.style("display", null);
-//         hoverLine.attr("x1", hoverLineCalc(this)).attr("x2", hoverLineCalc(this));
-//         hoverLine.style("display", null);
-//         $("#tooltips").show();
-//     })
-//     .on("mouseover",tip.show)
-//     .on("mouseout",tip.hide)
-//     .on("mouseout", function() { 
-//         focus.style("display", "none"); 
-//         hoverLine.style("display","none");
-//         $("#tooltips").hide();
-//     })
-//     .on("mousemove", function() {
-//         mousemove(this);
-//         hoverLine.attr("x1", hoverLineCalc(this)).attr("x2", hoverLineCalc(this));
-//     });
-
-function mousemove(obj, data) {
+function getMouseDate(obj, data) {
   var x0 = x.invert(graphPosX(obj)),
       i = bisectDate(data, x0),
       d0 = data[i - 1],
@@ -125,10 +93,9 @@ function mousemove(obj, data) {
 function moveFocii(obj) {
   d3.selectAll("g.focus")
     .each(function() {
-      console.log(this);
       var abbrid = $(this).attr("id"),
           abbr = abbrid.slice(0,abbrid.length-5);
-      var d = mousemove(obj, cachedData[cachedNames.indexOf(abbr)]);
+      var d = getMouseDate(obj, cachedData[cachedNames.indexOf(abbr)]);
       $(this).attr("transform",
           "translate(" + x(d.date) + "," +
             y(d.close) + ")");

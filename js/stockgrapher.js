@@ -87,9 +87,18 @@ function addNewStockGraph(data, curData, abbr) {
         .attr("class", "line")
         .attr("id", abbr+"Line")
         .attr("d", valueline(curData))
-        .style("stroke", function(){
-            return color;
+        .style("stroke", color)
+        .on("mouseover", function() {
+            console.log("path!");
+            d3.select(this).style("stroke-width", 3)
+        })
+        .on("mouseout", function() {
+            d3.select(this).style("stroke-width", 2)
+        })
+        .on("click", function() {
+            reloadNews(abbr);
         });
+
     // Add indv focus
     var focus = svg.append("g")
         .attr("class", "focus")
@@ -97,7 +106,7 @@ function addNewStockGraph(data, curData, abbr) {
         .style("display","none");
         //.style("display", "none");
     focus.append("circle")
-        .attr("r", 4)
+        .attr("r", 3)
         .attr("fill",color)
         .attr("stroke",color);
     focus.append("text")

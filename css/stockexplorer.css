@@ -44,7 +44,7 @@ path {
     shape-rendering: crispEdges;
 }
 
-/**********
+/**
 *  Line chart
 */
 
@@ -90,16 +90,11 @@ path {
 /**
  *	DYNAMIC GRAPH STYLING
  */
-
-
 .hover-line { 
   stroke: black;  
   fill: none;
   stroke-width: 1px;
 }
-
-
-
 
 .d3-tip {
   line-height: 1;

@@ -15,7 +15,12 @@ function xDomData(u) {
 		type:"POST",
 		async:false})
 	.done( function(data){
-		stockdata = data.contents
+		if (data.status.http_code == 200) {
+			stockdata = data.contents;
+		} else {
+			stockdata = 'error';
+		}
+		
 	});
 	// return success result
 	return stockdata;
@@ -40,7 +45,11 @@ function dataGet() {
 		return;
 	}
 	symbol = "http%3A%2F%2Fwww.google.com%2Ffinance%2Fhistorical%3Foutput%3Dcsv%26q%3D"+abbr+"&full_headers=1&full_status=1";
-	data = xDomData(symbol).replace("Date","Time");
+	var rawdata = xDomData(symbol);
+	if (rawdata == "error") {
+		return;
+	}
+	data = rawdata.replace("Date","Time");
 	jsondata = d3.csv.parse(data, function(d){
 		var parseDate = d3.time.format("%d-%b-%y").parse;
 		return {
@@ -59,6 +68,7 @@ function dataGet() {
 	addNewStockGraph(cachedData,jsondata,abbr);
 	$("#"+abbr+"Label").click(stockToggle(abbr));
 	$("#"+abbr+"Remove").click(delData(abbr));
+
 }
 
 function removeData(abbr) {
