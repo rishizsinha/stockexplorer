@@ -1,4 +1,5 @@
 // var dispatch = d3.dispatch('legendClick', 'legendMouseover', 'legendMouseout');
+var dynamic = true;
 
 function graphPosX(obj) {
   return d3.mouse(obj)[0]-margin.left;
@@ -31,10 +32,10 @@ var handleMouseOverGraph = function(obj) {
     d3.selectAll("g.focus")
       .style("display",null);
     moveFocii(obj);
-    tip.show(obj);
+    // tip.show(obj);
+    $("#dateHeading").text("Date: "+getMouseDate(obj).toDateString());
     //displayValueLabelsForPositionX(mouseX)
     // user is interacting
-    userCurrentlyInteracting = true;
     currentUserPositionX = mouseX;
   } else {
     // proactively act as if we've left the area since we're out of the bounds we want
@@ -46,9 +47,8 @@ var handleMouseOutGraph = function(obj) {
   hoverLine.classed("hide", true);
   d3.selectAll("g.focus")
     .style("display","none");
-  tip.hide();
+  // tip.hide();
   // user is no longer interacting
-  userCurrentlyInteracting = false;
   currentUserPositionX = -1;
 }
 
@@ -59,7 +59,7 @@ var tip = toolTip()
     var curDate = getMouseDate(d);
     return curDate.toDateString();
   });
-svgMain.call(tip);
+svg.call(tip);
 
 d3.select("#graphDiv")
     .on("mouseover", function() { 
@@ -111,6 +111,6 @@ function moveFocii(obj) {
       $(this).attr("transform",
           "translate(" + x(d.date) + "," +
             y(d.close) + ")");
-      $("#"+abbr+"curVal").html(d.close);
+      $("#"+abbr+"curVal").html("$"+d.close);
     }) 
 }

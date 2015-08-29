@@ -11,7 +11,7 @@ function reloadNews(abbr) {
 		},
 		async: false
 	});
-	$("#infoDiv").html("<h2>"+company+" in the news:");
+	$("#newsDiv").html("<h2>"+company+" in the news:");
 	$.ajax({
 		type: "POST",
 		url: "py/datamanip.py",

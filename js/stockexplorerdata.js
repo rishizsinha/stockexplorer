@@ -69,12 +69,11 @@ function dataGet() {
 	addNewStockGraph(cachedData,jsondata,abbr);
 	$("#"+abbr+"Label").click(stockToggle(abbr));
 	$("#"+abbr+"Remove").click(delData(abbr));
-	$("#infoTable").append("<tr id="+abbr+"Row</tr><td style='background-color:"+color+"'></td><td>"+abbr+"</td><td id="+abbr+"curVal>-</td>")
+	$("#infoTable").append("<tr id="+abbr+"Row</tr><td style='background-color:"+color+"'>    </td><td>"+abbr+"</td><td id="+abbr+"curVal>-</td>")
 
 }
 
 function removeData(abbr) {
-	console.log("remove activated for "+abbr);
 	var ind = cachedNames.indexOf(abbr);
 	if (ind > -1) {
 		removedData.push(cachedData[ind]);
@@ -84,10 +83,11 @@ function removeData(abbr) {
 	} else {
 		console.log(abbr+" not found");
 	}
+	console.log($("#"+abbr+"Row"));
+	$("#"+abbr+"Row").toggle();
 	removeStockGraph(cachedData, abbr);
 }
 function addData(abbr) {
-	console.log("add activated for "+abbr);
 	var ind = removedNames.indexOf(abbr);
 	if (ind > -1) {
 		cachedData.push(removedData[ind]);
@@ -97,6 +97,7 @@ function addData(abbr) {
 	} else {
 		console.log(abbr+" not found");
 	}
+	$("#"+abbr+"Row").show();
 	addNewStockGraph(cachedData, cachedData[cachedNames.indexOf(abbr)], abbr);
 }
 function delData(abbr) {
@@ -111,6 +112,7 @@ function delData(abbr) {
 	    	removedData.splice(ind,1);
 		}
 		$("#"+abbr+"Group").remove()
+		$("#"+abbr+"Row").remove();
 		removeStockGraph(cachedData, abbr);
 	}
 }

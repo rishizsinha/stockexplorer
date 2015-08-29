@@ -9,6 +9,13 @@ svg {
   pointer-events: all;
 }
 
+td, th {
+	padding: 8px 20px !important;
+}
+.table {
+	width:50px !important;
+}
+
 /**
  *	EXPLICIT ELEMENT STYLINGS
  */
@@ -24,8 +31,9 @@ svg {
 }
 
 #infoDiv {
-	height: 450px;
+	/*height: 450px;*/
 	padding: 15px;
+	vertical-align: top;
 }
 
 .btn-group {
