@@ -80,6 +80,22 @@ function refresh(data) {
     lines.transition().duration(1000)
         .attr("d", valueline);
 
+    d3.selectAll(".stockRow")
+      .each(function() {
+        var abbrid = $(this).attr("id"),
+            abbr = abbrid.slice(0,abbrid.indexOf("Row"));
+        d3.select("#"+abbr+"Row")
+        .on("click",function() {
+          reloadNews(abbr);
+        })
+        .on("mouseover", function() {
+          console.log(abbr);
+          d3.select("#"+abbr+"Line").style("stroke-width", 3);
+        })
+        .on("mouseout", function(){
+          d3.select("#"+abbr+"Line").style("stroke-width", 2);
+        });
+      });
 };
 
 function addNewStockGraph(data, curData, abbr) {
@@ -89,17 +105,7 @@ function addNewStockGraph(data, curData, abbr) {
         .attr("class", "line")
         .attr("id", abbr+"Line")
         .attr("d", valueline(curData))
-        .style("stroke", color)
-        .on("mouseover", function() {
-            console.log("path!");
-            d3.select(this).style("stroke-width", 3)
-        })
-        .on("mouseout", function() {
-            d3.select(this).style("stroke-width", 2)
-        })
-        .on("click", function() {
-            reloadNews(abbr);
-        });
+        .style("stroke", color);
 
     // Add indv focus
     var focus = svg.append("g")
@@ -119,7 +125,6 @@ function addNewStockGraph(data, curData, abbr) {
 }
 
 function removeStockGraph(data, abbr) {
-    console.log("exec");
     d3.select("#"+abbr+"Line").remove();
     d3.select("#"+abbr+"Focus").remove();
     refresh(data);

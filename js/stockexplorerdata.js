@@ -69,8 +69,17 @@ function dataGet() {
 	addNewStockGraph(cachedData,jsondata,abbr);
 	$("#"+abbr+"Label").click(stockToggle(abbr));
 	$("#"+abbr+"Remove").click(delData(abbr));
-	$("#infoTable").append("<tr id="+abbr+"Row</tr><td style='background-color:"+color+"'>    </td><td>"+abbr+"</td><td id="+abbr+"curVal>-</td>")
-
+	$("#infoTable").append("<tr class='stockRow' id="+abbr+"Row><td style='background-color:"+color+"'></td><td>"+abbr+"</td><td id="+abbr+"curVal>-</td></tr>")
+	d3.select("#"+abbr+"Row")
+		.on("click",function() {
+			reloadNews(abbr);
+		})
+		.on("mouseover", function() {
+			d3.select("#"+abbr+"Line").style("stroke-width", 3);
+		})
+		.on("mouseout", function(){
+			d3.select("#"+abbr+"Line").style("stroke-width", 2);
+		});
 }
 
 function removeData(abbr) {
@@ -83,7 +92,6 @@ function removeData(abbr) {
 	} else {
 		console.log(abbr+" not found");
 	}
-	console.log($("#"+abbr+"Row"));
 	$("#"+abbr+"Row").toggle();
 	removeStockGraph(cachedData, abbr);
 }

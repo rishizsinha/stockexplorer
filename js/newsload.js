@@ -8,6 +8,10 @@ function reloadNews(abbr) {
 		url: qurl,
 		success: function(data) {
 			company = data.query.results.quote["Name"];
+			console.log(company);
+			if (company.indexOf(" Common Stock") > -1) {
+				company = company.slice(0,company.indexOf(" Common Stock"))
+			}
 		},
 		async: false
 	});
@@ -16,11 +20,11 @@ function reloadNews(abbr) {
 		type: "POST",
 		url: "py/datamanip.py",
 		success: function(data) {
-			console.log(data);
+			//console.log(data);
 			working = data;
 		},
 		async: false
 	})
-	console.log(working);
+	//console.log(working);
 
 }

@@ -52,31 +52,15 @@ var handleMouseOutGraph = function(obj) {
   currentUserPositionX = -1;
 }
 
-var tip = toolTip()
-  .attr('class', 'd3-tip')
-  .attr('id','tooltips')
-  .html(function(d) {
-    var curDate = getMouseDate(d);
-    return curDate.toDateString();
-  });
-svg.call(tip);
-
 d3.select("#graphDiv")
-    .on("mouseover", function() { 
-        handleMouseOverGraph(this);
-    })
-    .on("mousemove", function() { 
-        handleMouseOverGraph(this);
-    })
-    .on("mouseout", function() {
-      handleMouseOutGraph(this);
-    });
-d3.select("path")
-  .on("mouseover", function() {
-    console.log("path!");
-  });
-d3.select("svg")
-  .on("mousemove", function(){
+  .on("mouseover", function() { 
+      handleMouseOverGraph(this);
+  })
+  .on("mousemove", function() { 
+      handleMouseOverGraph(this);
+  })
+  .on("mouseout", function() {
+    handleMouseOutGraph(this);
   });
 
 
