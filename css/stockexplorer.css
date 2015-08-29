@@ -23,6 +23,11 @@ svg {
 	padding:0;
 }
 
+#infoDiv {
+	height: 450px;
+	padding: 15px;
+}
+
 .btn-group {
 	margin: 5px 10px;
 }

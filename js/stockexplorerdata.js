@@ -2,7 +2,8 @@ var cachedDataObj = [],
 	cachedData = [],
 	cachedNames = [],
 	removedData = [],
-	removedNames = [];
+	removedNames = []
+	;
 
 function xDomData(u) {
 	// set url for ajax call
@@ -68,6 +69,7 @@ function dataGet() {
 	addNewStockGraph(cachedData,jsondata,abbr);
 	$("#"+abbr+"Label").click(stockToggle(abbr));
 	$("#"+abbr+"Remove").click(delData(abbr));
+	$("#infoTable").append("<tr id="+abbr+"Row</tr><td style='background-color:"+color+"'></td><td>"+abbr+"</td><td id="+abbr+"curVal>-</td>")
 
 }
 

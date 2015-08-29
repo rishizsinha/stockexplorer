@@ -8,12 +8,10 @@ var y = d3.scale.linear().range([height, 0]);
 // Define the axes
 var xAxis = d3.svg.axis().scale(x)
     .orient("bottom")
-    .ticks(12)
-    .scale(x);
+    .ticks(12);
 var yAxis = d3.svg.axis().scale(y)
     .orient("left")
-    .ticks(8)
-    .scale(y);
+    .ticks(8);
 
 // Define the line
 var valueline = d3.svg.line()
@@ -37,8 +35,9 @@ function arrayfn(fn, data, attr) {
     });
 }
 
-var now = new Date();
-var yrago = new Date().setFullYear(now.getFullYear()-1);
+var now = new Date(),
+    yrago = new Date().setFullYear(now.getFullYear()-1),
+    timedomain = d3.time.day.range(yrago, now);
 x.domain([yrago, now]);
 y.domain([0, 400]);
 
@@ -66,7 +65,10 @@ svg.append("text")
 // Get the data
 function refresh(data) {
     // Scale the range of the data
-    x.domain([arrayfn(d3.min,data,"date"), arrayfn(d3.max,data,"date")]);
+    var dmax = arrayfn(d3.max,data,"date"),
+        dmin = arrayfn(d3.min,data,"date"),
+        timedomain = d3.time.day.range(dmin,dmax);
+    x.domain([dmin, dmax]);
     y.domain([0, arrayfn(d3.max,data,"close")]);
 
     // Update

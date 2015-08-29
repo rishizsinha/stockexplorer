@@ -31,7 +31,7 @@ var handleMouseOverGraph = function(obj) {
     d3.selectAll("g.focus")
       .style("display",null);
     moveFocii(obj);
-    tip.show;
+    tip.show(obj);
     //displayValueLabelsForPositionX(mouseX)
     // user is interacting
     userCurrentlyInteracting = true;
@@ -46,11 +46,20 @@ var handleMouseOutGraph = function(obj) {
   hoverLine.classed("hide", true);
   d3.selectAll("g.focus")
     .style("display","none");
-  tip.hide;
+  tip.hide();
   // user is no longer interacting
   userCurrentlyInteracting = false;
   currentUserPositionX = -1;
 }
+
+var tip = toolTip()
+  .attr('class', 'd3-tip')
+  .attr('id','tooltips')
+  .html(function(d) {
+    var curDate = getMouseDate(d);
+    return curDate.toDateString();
+  });
+svgMain.call(tip);
 
 d3.select("#graphDiv")
     .on("mouseover", function() { 
@@ -65,25 +74,28 @@ d3.select("#graphDiv")
 d3.select("path")
   .on("mouseover", function() {
     console.log("path!");
-  })
+  });
+d3.select("svg")
+  .on("mousemove", function(){
+  });
 
-var tip = d3.tip()
-  .attr('class', 'd3-tip')
-  .attr('id','tooltips')
-  .offset([20, 0])
-  .html(function(d) {
-    console.log('TRYING');
-    return d.date;
-  })
-svg.call(tip);
 
-var bisectDate = d3.bisector(function(d) { return d.date; }).left,
-    formatValue = d3.format(",.2f"),
-    formatCurrency = function(d) { return "$" + formatValue(d); };
 
-function getMouseDate(obj, data) {
+var bisectDate = d3.bisector(function(d) { return d}).left,
+    bisectDateObj = d3.bisector(function(d) { return d.date}).left;
+
+function getMouseDate(obj) {
   var x0 = x.invert(graphPosX(obj)),
-      i = bisectDate(data, x0),
+      i = bisectDate(timedomain, x0),
+      d0 = timedomain[i - 1],
+      d1 = timedomain[i],
+      d = x0 - d0.date > d1.date - x0 ? d1 : d0;
+  return d;
+}
+
+function getMouseDateObj(obj, data) {
+  var x0 = x.invert(graphPosX(obj));
+      i = bisectDateObj(data, x0);
       d0 = data[i - 1],
       d1 = data[i],
       d = x0 - d0.date > d1.date - x0 ? d1 : d0;
@@ -94,10 +106,11 @@ function moveFocii(obj) {
   d3.selectAll("g.focus")
     .each(function() {
       var abbrid = $(this).attr("id"),
-          abbr = abbrid.slice(0,abbrid.length-5);
-      var d = getMouseDate(obj, cachedData[cachedNames.indexOf(abbr)]);
+          abbr = abbrid.slice(0,abbrid.length-5),
+          d = getMouseDateObj(obj, cachedData[cachedNames.indexOf(abbr)]);
       $(this).attr("transform",
           "translate(" + x(d.date) + "," +
             y(d.close) + ")");
+      $("#"+abbr+"curVal").html(d.close);
     }) 
 }
