@@ -71,7 +71,7 @@ function dataGet() {
 	addNewStockGraph(jsondata,abbr);
 	$("#"+abbr+"Label").click(stockToggle(abbr));
 	$("#"+abbr+"Remove").click(delData(abbr));
-	$("#infoTable").append("<tr class='stockRow' id="+abbr+"Row><td style='background-color:"+color+"'></td><td>"+abbr+"</td><td id="+abbr+"curVal>-</td></tr>")
+	$("#infoTable").append("<tr class='stockRow' id="+abbr+"Row><td style='background-color:"+color+"'></td><td>"+abbr+"</td><td class='priceCell' id="+abbr+"curPrice>-</td><td id="+abbr+"PercChange>-</td></tr>")
 	d3.select("#"+abbr+"Row")
 		.on("click",function() {
 			reloadNews(abbr);
@@ -103,7 +103,7 @@ function addData(abbr) {
 	var ind = removedNames.indexOf(abbr);
 	if (ind > -1) {
 		cachedData.push(removedData[ind]);
-		cachedData1.push(removedData[ind]);
+		cachedData1.push(removedData1[ind]);
 		cachedNames.push(removedNames[ind]);
 	    removedNames.splice(ind, 1);
 	    removedData.splice(ind,1);
@@ -142,7 +142,7 @@ function derivArray(arr) {
 	var objdate, objchange;
 	for (i = 1; i < arr.length; i++) {
 		objdate = arr[i].date,
-		objchange = ((arr[i].close - arr[i-1].close)/arr[i-1].close).toPrecision(4) * 100
+		objchange = ((arr[i].close - arr[i-1].close)/arr[i-1].close) * 100
 		deriv.push({date: objdate, change: objchange});
 	}
 	return deriv;

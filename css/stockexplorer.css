@@ -20,6 +20,10 @@ td, th {
  *	EXPLICIT ELEMENT STYLINGS
  */
 
+ .priceCell {
+ 	width: 70px !important;
+ }
+
  #apptitle {
 	size: 20;
 }
