@@ -20,47 +20,60 @@ hoverLine = hoverLineGroup
 // hide it by default
 hoverLine.classed("hide", true);
 
+var curDate;
 var handleMouseOverGraph = function(obj) {  
   var mouseX = graphPosX(obj);
   var mouseY = graphPosY(obj);
   if(mouseX >= 0 && mouseX <= width && mouseY >= 0 && mouseY <= height) {
-    // show the hover line
-    hoverLine.classed("hide", false);
-    // set position of hoverLine
-    hoverLine.attr("x1", mouseX).attr("x2", mouseX)
+    if (dynamic) {
+      // show the hover line
+      hoverLine.classed("hide", false);
+      // set position of hoverLine
+      hoverLine.attr("x1", mouseX).attr("x2", mouseX)
 
-    d3.selectAll("g.focus")
-      .style("display",null);
-    moveFocii(obj);
-    // tip.show(obj);
-    $("#dateHeading").text("Date: "+getMouseDate(obj).toDateString());
-    //displayValueLabelsForPositionX(mouseX)
-    // user is interacting
-    currentUserPositionX = mouseX;
+      d3.selectAll("g.focus")
+        .style("display",null);
+      moveFocii(obj);
+      // tip.show(obj);
+      curDate = getMouseDate(obj);
+      $("#dateHeading").text("Date: "+curDate.toDateString());
+      //displayValueLabelsForPositionX(mouseX)
+      // user is interacting
+      currentUserPositionX = mouseX;
+    }
   } else {
-    // proactively act as if we've left the area since we're out of the bounds we want
-    handleMouseOutGraph(obj)
-  }
+    if (dynamic) {
+      // proactively act as if we've left the area since we're out of the bounds we want
+      handleMouseOutGraph(obj);
+    }  
+  }  
 }
 var handleMouseOutGraph = function(obj) { 
   // hide the hover-line
-  hoverLine.classed("hide", true);
-  d3.selectAll("g.focus")
-    .style("display","none");
-  // tip.hide();
-  // user is no longer interacting
-  currentUserPositionX = -1;
+  console.log(dynamic);
+  if (dynamic) {
+    hoverLine.classed("hide", true);
+    d3.selectAll("g.focus")
+      .style("display","none");
+    // tip.hide();
+    // user is no longer interacting
+    currentUserPositionX = -1;
+  }
 }
 
 d3.select("#graphDiv")
-  .on("mouseover", function() { 
-      handleMouseOverGraph(this);
+  .on("mouseover", function() {
+    console.log("turning on");
+    dynamic = true;;
   })
   .on("mousemove", function() { 
       handleMouseOverGraph(this);
   })
   .on("mouseout", function() {
     handleMouseOutGraph(this);
+  })
+  .on("click", function() {
+    dynamic = false;
   });
 
 

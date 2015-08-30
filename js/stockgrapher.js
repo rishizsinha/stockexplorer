@@ -89,7 +89,6 @@ function refresh(data) {
           reloadNews(abbr);
         })
         .on("mouseover", function() {
-          console.log(abbr);
           d3.select("#"+abbr+"Line").style("stroke-width", 3);
         })
         .on("mouseout", function(){
@@ -129,3 +128,10 @@ function removeStockGraph(data, abbr) {
     d3.select("#"+abbr+"Focus").remove();
     refresh(data);
 }
+
+/********************************************************
+ *** PERCENT CHANGE SECTION
+ ********************************************************/
+
+
+

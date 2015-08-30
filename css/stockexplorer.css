@@ -107,6 +107,8 @@ path {
   stroke: black;  
   fill: none;
   stroke-width: 1px;
+  pointer-events: none;
+
 }
 
 .d3-tip {
