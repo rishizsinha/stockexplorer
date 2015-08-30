@@ -47,6 +47,8 @@ path {
     stroke: black;
     stroke-width: 2;
     fill: none;
+
+    pointer-events:none;
 }
 
 .axis path,
@@ -60,6 +62,10 @@ path {
 /**
 *  Line chart
 */
+
+.xaxis, .yaxis {
+	pointer-events:none;
+}
 
 .point-paths path {
   /*
@@ -83,6 +89,8 @@ path {
   transition-delay: 250ms
   -moz-transition-delay: 250ms;
   -webkit-transition-delay: 250ms;
+
+
 }
 
 .line.hover path {
@@ -103,6 +111,7 @@ path {
 /**
  *	DYNAMIC GRAPH STYLING
  */
+
 .hover-line { 
   stroke: black;  
   fill: none;

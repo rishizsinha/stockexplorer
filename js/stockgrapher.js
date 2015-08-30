@@ -14,9 +14,13 @@ var yAxis = d3.svg.axis().scale(y)
     .ticks(8);
 
 // Define the line
-var valueline = d3.svg.line()
-    .x(function(d) { return x(d.date); })
-    .y(function(d) { return y(d.close); });
+var valueline0 = d3.svg.line()
+        .x(function(d) { return x(d.date); })
+        .y(function(d) { return y(d.close); }),
+    valueline1 = d3.svg.line()
+        .x(function(d) { return x(d.date); })
+        .y(function(d) { return y(d.change); }),
+    mode = {"$":valueline0, "%":valueline1};
     
 // Adds the svg canvas
 var svgMain = d3.select("#graphDiv")
@@ -58,18 +62,27 @@ svg.selectAll(".xaxis text")  // select all the text elements for the xaxis
 
 // now add titles to the axes
 svg.append("text")
+    .attr("id","ylabel")
     .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
     .attr("transform", "translate("+ "-50" +","+(height/2)+")rotate(-90)")  // text is drawn off the screen top left, move down and out and rotate
     .text("Stock Price");
 
 // Get the data
-function refresh(data) {
+function refresh() {
+    data = chooseData();
     // Scale the range of the data
     var dmax = arrayfn(d3.max,data,"date"),
         dmin = arrayfn(d3.min,data,"date"),
         timedomain = d3.time.day.range(dmin,dmax);
     x.domain([dmin, dmax]);
-    y.domain([0, arrayfn(d3.max,data,"close")]);
+    if (curMode == "$") {
+        y.domain([0, arrayfn(d3.max,data,"close")]);
+    } else if (curMode == "%") {
+        y.domain([arrayfn(d3.min,data,"change"),arrayfn(d3.max,data,"change")]);
+    } else {
+        console.log("um");
+    }
+    
 
     // Update
     svg.select(".yaxis")
@@ -78,7 +91,7 @@ function refresh(data) {
 
     var lines = svg.selectAll(".line").data(data).attr("class","line");
     lines.transition().duration(1000)
-        .attr("d", valueline);
+        .attr("d", mode[curMode]);
 
     d3.selectAll(".stockRow")
       .each(function() {
@@ -97,13 +110,13 @@ function refresh(data) {
       });
 };
 
-function addNewStockGraph(data, curData, abbr) {
+function addNewStockGraph(curData, abbr) {
     var color = $("#"+abbr+"Group").attr("graphColor");
     // Add the new path.
     svg.append("path")
         .attr("class", "line")
         .attr("id", abbr+"Line")
-        .attr("d", valueline(curData))
+        .attr("d", mode[curMode](curData))
         .style("stroke", color);
 
     // Add indv focus
@@ -120,18 +133,31 @@ function addNewStockGraph(data, curData, abbr) {
        .attr("x", 9)
        .attr("dy", ".35em");
 
-    refresh(data);
+    refresh();
 }
 
-function removeStockGraph(data, abbr) {
+function removeStockGraph(abbr) {
     d3.select("#"+abbr+"Line").remove();
     d3.select("#"+abbr+"Focus").remove();
-    refresh(data);
+    refresh();
 }
 
 /********************************************************
  *** PERCENT CHANGE SECTION
  ********************************************************/
-
-
+curMode="$"
+$("#relChangeMode").click(function() {
+    curMode="%";
+    $(this).addClass("active");
+    $("#absPriceMode").removeClass("active");
+    $("#ylabel").text("Percent Change");
+    refresh();
+});
+$("#absPriceMode").click(function() {
+    curMode="$";
+    $(this).addClass("active");
+    $("#relChangeMode").removeClass("active");
+    $("#ylabel").text("Stock Price");
+    refresh()
+});
 

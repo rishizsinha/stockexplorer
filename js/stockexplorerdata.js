@@ -1,9 +1,9 @@
-var cachedDataObj = [],
-	cachedData = [],
+var cachedData = [],
 	cachedNames = [],
 	removedData = [],
-	removedNames = []
-	;
+	removedNames = [],
+	cachedData1 = [],
+	removedData1 = [];
 
 function xDomData(u) {
 	// set url for ajax call
@@ -41,6 +41,7 @@ function stockToggle(abbr) {
 
 var abbr, symbol, data, jsondata;
 function dataGet() {
+	console.log("yes?");
 	abbr = $("#stockInput").val().toUpperCase();
 	if (cachedNames.indexOf(abbr) > -1 || removedNames.indexOf(abbr) > -1) {
 		return;
@@ -64,9 +65,10 @@ function dataGet() {
 	}).reverse();
 	var color = '#'+Math.floor(Math.random()*16777215).toString(16);
 	cachedData.push(jsondata);
+	cachedData1.push(derivArray(jsondata));
 	cachedNames.push(abbr);
 	$("#enteredStocks").append("<div class='btn-group' graphColor="+color+" id="+abbr+"Group role='group'><button type='button' class='btn btn-default' id="+abbr+"Remove>X</button><button type='button' class='btn btn-success' id="+abbr+"Label>"+abbr+"</button></div>");
-	addNewStockGraph(cachedData,jsondata,abbr);
+	addNewStockGraph(jsondata,abbr);
 	$("#"+abbr+"Label").click(stockToggle(abbr));
 	$("#"+abbr+"Remove").click(delData(abbr));
 	$("#infoTable").append("<tr class='stockRow' id="+abbr+"Row><td style='background-color:"+color+"'></td><td>"+abbr+"</td><td id="+abbr+"curVal>-</td></tr>")
@@ -87,26 +89,30 @@ function removeData(abbr) {
 	if (ind > -1) {
 		removedData.push(cachedData[ind]);
 		removedNames.push(cachedNames[ind]);
+		removedData1.push(cachedData1[ind]);
 	    cachedNames.splice(ind, 1);
 	    cachedData.splice(ind,1);
+	    cachedData1.splice(ind,1);
 	} else {
 		console.log(abbr+" not found");
 	}
 	$("#"+abbr+"Row").toggle();
-	removeStockGraph(cachedData, abbr);
+	removeStockGraph(abbr);
 }
 function addData(abbr) {
 	var ind = removedNames.indexOf(abbr);
 	if (ind > -1) {
 		cachedData.push(removedData[ind]);
+		cachedData1.push(removedData[ind]);
 		cachedNames.push(removedNames[ind]);
 	    removedNames.splice(ind, 1);
 	    removedData.splice(ind,1);
+	    removedData1.splice(ind,1);
 	} else {
 		console.log(abbr+" not found");
 	}
 	$("#"+abbr+"Row").show();
-	addNewStockGraph(cachedData, cachedData[cachedNames.indexOf(abbr)], abbr);
+	addNewStockGraph(chooseData()[cachedNames.indexOf(abbr)], abbr);
 }
 function delData(abbr) {
 	return function() {
@@ -114,22 +120,39 @@ function delData(abbr) {
 		if (ind > -1) {
 			cachedNames.splice(ind, 1);
 	    	cachedData.splice(ind,1);
+	    	cachedData1.splice(ind,1);
 		} else {
 			ind = removedNames.indexOf(abbr);
 			removedNames.splice(ind, 1);
 	    	removedData.splice(ind,1);
+	    	removedData1.splice(ind,1);
 		}
 		$("#"+abbr+"Group").remove()
 		$("#"+abbr+"Row").remove();
-		removeStockGraph(cachedData, abbr);
+		removeStockGraph(abbr);
 	}
 }
 
 
 $.ajaxSetup({ cache: false });
-
 $("#stockCheck").click(dataGet);
-$("#stockCheck").on('keydown', dataGet);
 
+function derivArray(arr) {
+	deriv = [];
+	var objdate, objchange;
+	for (i = 1; i < arr.length; i++) {
+		objdate = arr[i].date,
+		objchange = ((arr[i].close - arr[i-1].close)/arr[i-1].close).toPrecision(4) * 100
+		deriv.push({date: objdate, change: objchange});
+	}
+	return deriv;
+}
 
+function chooseData() {
+	if (curMode == "$") {
+		return cachedData;
+	} else if (curMode == "%") {
+		return cachedData1;
+	}
+}
 

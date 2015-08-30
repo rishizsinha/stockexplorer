@@ -50,7 +50,6 @@ var handleMouseOverGraph = function(obj) {
 }
 var handleMouseOutGraph = function(obj) { 
   // hide the hover-line
-  console.log(dynamic);
   if (dynamic) {
     hoverLine.classed("hide", true);
     d3.selectAll("g.focus")
@@ -63,7 +62,6 @@ var handleMouseOutGraph = function(obj) {
 
 d3.select("#graphDiv")
   .on("mouseover", function() {
-    console.log("turning on");
     dynamic = true;;
   })
   .on("mousemove", function() { 
@@ -104,10 +102,16 @@ function moveFocii(obj) {
     .each(function() {
       var abbrid = $(this).attr("id"),
           abbr = abbrid.slice(0,abbrid.length-5),
-          d = getMouseDateObj(obj, cachedData[cachedNames.indexOf(abbr)]);
-      $(this).attr("transform",
+          d = getMouseDateObj(obj, chooseData()[cachedNames.indexOf(abbr)]);
+      if (curMode == "$") {
+        $(this).attr("transform",
           "translate(" + x(d.date) + "," +
             y(d.close) + ")");
+      } else if (curMode == "%") {
+        $(this).attr("transform",
+          "translate(" + x(d.date) + "," +
+            y(d.change) + ")");
+      }
       $("#"+abbr+"curVal").html("$"+d.close);
     }) 
 }

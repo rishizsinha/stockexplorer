@@ -25,19 +25,22 @@ function reloadNews(abbr) {
 			if (searchTerm.indexOf("Company") > -1) {
 				searchTerm = searchTerm.slice(0,searchTerm.indexOf("Company"));
 			}
+			searchTerm = searchTerm.trim();
 			console.log(company+" --> "+searchTerm);
 		},
 		async: false
 	});
 	$("#newsDiv").html("<h2>"+company+" on "+curDate.toDateString()+":");
 	var daystart = curDate.getTime(),
-		dayend = daystart + 86400000-1;
+		dayend = daystart + 86400000-1,
+		surl = "https://access.alchemyapi.com/calls/data/GetNews?apikey=b20ea6fd88921067d21baae2352df2f72e062294&return=enriched.url.title&start="+daystart+"&end="+dayend+"&q.enriched.url.cleanedTitle="+encodeURI(searchTerm)+"&count=25&outputMode=json";
+	console.log(surl);
 	$.ajax({
 		type: "POST",
-		url: "https://access.alchemyapi.com/calls/data/GetNews?apikey=b20ea6fd88921067d21baae2352df2f72e062294&return=enriched.url.title&start=1440028800&end=1440716400&q.enriched.url.cleanedTitle=3M%20Company&count=25&outputMode=json",
+		url: surl,
 		success: function(data) {
-			//console.log(data);
-			working = data;
+			console.log(data);
+			$("newsDiv").append(data);
 		},
 		async: false
 	})
