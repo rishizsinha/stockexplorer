@@ -12,7 +12,6 @@ var xAxis = d3.svg.axis().scale(x)
 var yAxis = d3.svg.axis().scale(y)
     .orient("left")
     .ticks(8);
-
 // Define the line
 var valueline0 = d3.svg.line()
         .x(function(d) { return x(d.date); })
@@ -42,9 +41,12 @@ function arrayfn(fn, data, attr) {
 }
 
 var now = new Date(),
-    yrago = new Date().setFullYear(now.getFullYear()-1),
-    timedomain = d3.time.day.range(yrago, now);
-console.log(now.getTime()+","+yrago)
+    yrago = new Date(now.getTime()-31556926000),
+    sixmoago = new Date(now.getTime()-(2629743000*6)),
+    moago = new Date(now.getTime()-2629743000),
+    weekago = new Date(now.getTime()-604800000),
+    beginFrame = yrago,
+    timedomain = d3.time.day.range(beginFrame, now);
 x.domain([yrago, now]);
 y.domain([0, 400]);
 
@@ -72,13 +74,40 @@ svg.append("text")
 
 // Get the data
 function refresh() {
-    data = chooseData();
+    data = chooseData().map(function(e) {
+        var f = e.filter(function(el) {
+            return el.date > beginFrame;
+        });
+        var first = f[0];
+        if (first.hasOwnProperty("close")) {
+            while (f.length < e.length) {
+                f.unshift({date:beginFrame, close:first.close});
+            }
+        } else if (first.hasOwnProperty("change")) {
+            while (f.length < e.length) {
+                f.unshift({date:beginFrame, change:first.change});
+            }
+        } else {
+            console.log("um");
+        }
+        return f;
+    });
+    console.log(data);
     // Scale the range of the data
-    var dmax = arrayfn(d3.max,data,"date"),
-        dmin = arrayfn(d3.min,data,"date"),
-        timedomain = d3.time.day.range(dmin,dmax);
-    //console.log(dmin+","+dmax);
-    // x.domain([dmin, dmax]);
+    // var dmax = arrayfn(d3.max,data,"date"),
+    //     dmin = arrayfn(d3.min,data,"date"),
+    //     timedomain = d3.time.day.range(dmin,dmax);
+    timedomain = d3.time.day.range(beginFrame, now);
+    x.domain([beginFrame, now])
+
+    svg.select(".xaxis")
+        .transition().duration(1000).ease("sin-in-out")  // https://github.com/mbostock/d3/wiki/Transitions#wiki-d3_ease
+        .call(xAxis);
+    svg.selectAll(".xaxis text")  // select all the text elements for the xaxis
+      .attr("transform", function(d) {
+          return "translate(" + this.getBBox().height*-2 + "," + this.getBBox().height + ")rotate(-45)";
+    });
+
     if (curMode == "$") {
         y.domain([0, arrayfn(d3.max,data,"close")]);
     } else if (curMode == "%" || curMode == "%%") {
@@ -174,3 +203,39 @@ $("#change2Mode").click(function() {
     refresh();
 })
 
+/*********************************************************
+ *** TIMEFRAME CHANGE SECTION
+ *********************************************************/
+
+$("#yearView").click(function() {
+    beginFrame=yrago;
+    refresh();
+    $("#sixmoView").removeClass("active");
+    $("#moView").removeClass("active");
+    $("#weekView").removeClass("active");
+    $(this).addClass("active");
+});
+$("#sixmoView").click(function() {
+    beginFrame = sixmoago;
+    refresh();
+    $("#yearView").removeClass("active");
+    $("#moView").removeClass("active");
+    $("#weekView").removeClass("active");
+    $(this).addClass("active");
+});
+$("#moView").click(function() {
+    beginFrame = moago;
+    refresh();
+    $("#yearView").removeClass("active");
+    $("#sixmoView").removeClass("active");
+    $("#weekView").removeClass("active");
+    $(this).addClass("active");
+});
+$("#weekView").click(function() {
+    beginFrame = weekago;
+    refresh();
+    $("#yearView").removeClass("active");
+    $("#sixmoView").removeClass("active");
+    $("#moView").removeClass("active");
+    $(this).addClass("active");
+});

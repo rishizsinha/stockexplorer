@@ -31,8 +31,8 @@ function reloadNews(abbr) {
 		async: false
 	});
 	$("#newsDiv").html("<h2>"+company+" on "+curDate.toDateString()+":");
-	var daystart = curDate.getTime(),
-		dayend = daystart + 86400000-1,
+	var daystart = Math.round(curDate.getTime()/1000.0),
+		dayend = daystart + 86400-1,
 		surl = "https://access.alchemyapi.com/calls/data/GetNews?apikey=b20ea6fd88921067d21baae2352df2f72e062294&return=enriched.url.title&start="+daystart+"&end="+dayend+"&q.enriched.url.cleanedTitle="+encodeURI(searchTerm)+"&count=25&outputMode=json";
 	console.log(daystart+","+dayend);
 	console.log(surl);

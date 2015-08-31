@@ -114,8 +114,6 @@ function moveFocii(obj) {
           inter0 = getDateInfo(base.date, cachedData[cachedNames.indexOf(abbr)]),
           inter1 = getDateInfo(base.date, cachedData1[cachedNames.indexOf(abbr)]),
           inter2 = getDateInfo(base.date, cachedData2[cachedNames.indexOf(abbr)]);
-      console.log(inter1);
-      console.log(inter2);
       if (curMode == "$") {
         $(this).attr("transform",
           "translate(" + x(inter0.date) + "," +
