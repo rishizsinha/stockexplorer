@@ -17,10 +17,12 @@ var yAxis = d3.svg.axis().scale(y)
 var valueline0 = d3.svg.line()
         .x(function(d) { return x(d.date); })
         .y(function(d) { return y(d.close); }),
+        // .interpolate("basic"),
     valueline1 = d3.svg.line()
         .x(function(d) { return x(d.date); })
         .y(function(d) { return y(d.change); }),
-    mode = {"$":valueline0, "%":valueline1};
+        // .interpolate("bundle"),
+    mode = {"$":valueline0, "%":valueline1, "%%":valueline1};
     
 // Adds the svg canvas
 var svgMain = d3.select("#graphDiv")
@@ -42,6 +44,7 @@ function arrayfn(fn, data, attr) {
 var now = new Date(),
     yrago = new Date().setFullYear(now.getFullYear()-1),
     timedomain = d3.time.day.range(yrago, now);
+console.log(now.getTime()+","+yrago)
 x.domain([yrago, now]);
 y.domain([0, 400]);
 
@@ -74,16 +77,16 @@ function refresh() {
     var dmax = arrayfn(d3.max,data,"date"),
         dmin = arrayfn(d3.min,data,"date"),
         timedomain = d3.time.day.range(dmin,dmax);
-    x.domain([dmin, dmax]);
+    //console.log(dmin+","+dmax);
+    // x.domain([dmin, dmax]);
     if (curMode == "$") {
         y.domain([0, arrayfn(d3.max,data,"close")]);
-    } else if (curMode == "%") {
+    } else if (curMode == "%" || curMode == "%%") {
         y.domain([arrayfn(d3.min,data,"change"),arrayfn(d3.max,data,"change")]);
     } else {
         console.log("um");
     }
     
-
     // Update
     svg.select(".yaxis")
         .transition().duration(1000).ease("sin-in-out")  // https://github.com/mbostock/d3/wiki/Transitions#wiki-d3_ease
@@ -102,7 +105,7 @@ function refresh() {
           reloadNews(abbr);
         })
         .on("mouseover", function() {
-          d3.select("#"+abbr+"Line").style("stroke-width", 3);
+          d3.select("#"+abbr+"Line").style("stroke-width", 3.5);
         })
         .on("mouseout", function(){
           d3.select("#"+abbr+"Line").style("stroke-width", 2);
@@ -150,6 +153,7 @@ $("#relChangeMode").click(function() {
     curMode="%";
     $(this).addClass("active");
     $("#absPriceMode").removeClass("active");
+    $("#change2Mode").removeClass("active");
     $("#ylabel").text("Percent Change");
     refresh();
 });
@@ -157,7 +161,16 @@ $("#absPriceMode").click(function() {
     curMode="$";
     $(this).addClass("active");
     $("#relChangeMode").removeClass("active");
+    $("#change2Mode").removeClass("active");
     $("#ylabel").text("Stock Price");
-    refresh()
+    refresh();
 });
+$("#change2Mode").click(function() {
+    curMode="%%";
+    $(this).addClass("active");
+    $("#relChangeMode").removeClass("active");
+    $("#absPriceMode").removeClass("active");
+    $("#ylabel").text("Percent Percent Change");
+    refresh();
+})
 

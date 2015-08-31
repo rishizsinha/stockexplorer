@@ -34,16 +34,17 @@ function reloadNews(abbr) {
 	var daystart = curDate.getTime(),
 		dayend = daystart + 86400000-1,
 		surl = "https://access.alchemyapi.com/calls/data/GetNews?apikey=b20ea6fd88921067d21baae2352df2f72e062294&return=enriched.url.title&start="+daystart+"&end="+dayend+"&q.enriched.url.cleanedTitle="+encodeURI(searchTerm)+"&count=25&outputMode=json";
+	console.log(daystart+","+dayend);
 	console.log(surl);
-	$.ajax({
-		type: "POST",
-		url: surl,
-		success: function(data) {
-			console.log(data);
-			$("newsDiv").append(data);
-		},
-		async: false
-	})
+	// $.ajax({
+	// 	type: "POST",
+	// 	url: surl,
+	// 	success: function(data) {
+	// 		console.log(data);
+	// 		$("newsDiv").append(data);
+	// 	},
+	// 	async: false
+	// })
 	
 
 }

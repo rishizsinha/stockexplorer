@@ -112,10 +112,10 @@ function moveFocii(obj) {
           abbr = abbrid.slice(0,abbrid.length-5),
           base = getMouseDateObj(obj, chooseData()[cachedNames.indexOf(abbr)])
           inter0 = getDateInfo(base.date, cachedData[cachedNames.indexOf(abbr)]),
-          inter1 = getDateInfo(base.date, cachedData1[cachedNames.indexOf(abbr)]);
-      console.log(base);
-      console.log(inter0);
+          inter1 = getDateInfo(base.date, cachedData1[cachedNames.indexOf(abbr)]),
+          inter2 = getDateInfo(base.date, cachedData2[cachedNames.indexOf(abbr)]);
       console.log(inter1);
+      console.log(inter2);
       if (curMode == "$") {
         $(this).attr("transform",
           "translate(" + x(inter0.date) + "," +
@@ -124,6 +124,10 @@ function moveFocii(obj) {
         $(this).attr("transform",
           "translate(" + x(inter1.date) + "," +
             y(inter1.change) + ")");
+      } else {
+        $(this).attr("transform",
+          "translate(" + x(inter2.date) + "," +
+            y(inter2.change) + ")");
       }
       $("#"+abbr+"curPrice").html("$"+inter0.close);
       if (inter1.change > 0) {
@@ -132,6 +136,13 @@ function moveFocii(obj) {
         $("#"+abbr+"PercChange").html(inter1.change.toFixed(2)+"%").css("color","red");
       } else {
          $("#"+abbr+"PercChange").html("0%").css("color","black")
+      }
+      if (inter2.change > 0) {
+        $("#"+abbr+"Delta").html("+"+inter2.change.toFixed(2)+"%").css("color","green");
+      } else if (inter1.change < 0) {
+        $("#"+abbr+"Delta").html(inter2.change.toFixed(2)+"%").css("color","red");
+      } else {
+         $("#"+abbr+"Delta").html("0%").css("color","black")
       }
     }) 
 }
