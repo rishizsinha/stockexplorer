@@ -15,12 +15,12 @@ var yAxis = d3.svg.axis().scale(y)
 // Define the line
 var valueline0 = d3.svg.line()
         .x(function(d) { return x(d.date); })
-        .y(function(d) { return y(d.close); }),
-        // .interpolate("basic"),
+        .y(function(d) { return y(d.close); });
+        // .interpolate("basic");
     valueline1 = d3.svg.line()
         .x(function(d) { return x(d.date); })
-        .y(function(d) { return y(d.change); }),
-        // .interpolate("bundle"),
+        .y(function(d) { return y(d.change); });
+        //.interpolate("bundle");
     mode = {"$":valueline0, "%":valueline1, "%%":valueline1};
     
 // Adds the svg canvas
@@ -92,11 +92,7 @@ function refresh() {
         }
         return f;
     });
-    console.log(data);
-    // Scale the range of the data
-    // var dmax = arrayfn(d3.max,data,"date"),
-    //     dmin = arrayfn(d3.min,data,"date"),
-    //     timedomain = d3.time.day.range(dmin,dmax);
+
     timedomain = d3.time.day.range(beginFrame, now);
     x.domain([beginFrame, now])
 

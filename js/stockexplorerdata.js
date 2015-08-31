@@ -147,6 +147,11 @@ function delData(abbr) {
 
 $.ajaxSetup({ cache: false });
 $("#stockCheck").click(dataGet);
+$("#stockInput").keyup(function(event){
+    if(event.keyCode == 13){
+        dataGet();
+    }
+});
 
 function derivArray1(arr) {
 	deriv = [];
