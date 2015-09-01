@@ -26,7 +26,7 @@ function reloadNews(abbr) {
 				searchTerm = searchTerm.slice(0,searchTerm.indexOf("Company"));
 			}
 			searchTerm = searchTerm.trim();
-			console.log(company+" --> "+searchTerm);
+			// console.log(company+" --> "+searchTerm);
 		},
 		async: false
 	});
@@ -34,26 +34,26 @@ function reloadNews(abbr) {
 	var daystart = Math.round(curDate.getTime()/1000.0),
 		dayend = daystart + 86400-1,
 		surl = "https://access.alchemyapi.com/calls/data/GetNews?apikey=b20ea6fd88921067d21baae2352df2f72e062294&return=enriched.url.title,enriched.url.url,enriched.url.enrichedTitle.entities,enriched.url.enrichedTitle.docSentiment,enriched.url.enrichedTitle.concepts&start="+daystart+"&end="+dayend+"&q.enriched.url.cleanedTitle="+encodeURI(searchTerm)+"&count=25&outputMode=json";
-	console.log(surl);
+	// console.log(surl);
 	$.ajax({
 		type: "POST",
 		url: surl,
 		success: function(data) {
-			console.log(data);
+			// console.log(data);
 			displayNews(data);
 		},
 		async: false
 	})
 	// displayNews(alphasample);
 
-	$("#newsDiv").append("<p><a href='www.alchemyapi.com'>Text Analysis by <img src='http://www.alchemyapi.com/sites/default/files/alchemyAPI.png' style='height:25px; width:auto; padding-left:2px'></a></p>")
+	$("#newsDiv").append("<p><a href='http://www.alchemyapi.com'>Text Analysis by <img src='http://www.alchemyapi.com/sites/default/files/alchemyAPI.png' style='height:25px; width:auto; padding-left:2px'></a></p>")
 }
 
 function displayNews(data) {
 	// console.log(data);
 	if (data["status"] == "OK") {
 		var docs = data.result.docs
-		if (docs.length > 0) {
+		if (typeof docs != "undefined") {
 			$("#newsDiv").append("<div class='row'><div class='col-md-4'><h3>Positive</h3><ul id='posDocsList'></ul></div><div class='col-md-4'><h3>Neutral</h3><ul id='neuDocsList'></ul></div><div class='col-md-4'><h3>Negative</h3><ul id='negDocsList'></ul></div></div>");
 			for (var i = 0; i < docs.length; i++) {
 				var info = docs[i]["source"].enriched.url
