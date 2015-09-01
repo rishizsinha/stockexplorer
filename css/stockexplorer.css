@@ -10,7 +10,7 @@ svg {
 }
 
 td, th {
-	padding: 8px 16px !important;
+	padding: 8px 15px !important;
 	min-width: 20px;
 }
 /*.table {
@@ -52,6 +52,10 @@ td, th {
 /**
  *	STATIC GRAPH STYLING
  */
+
+ .stockRow:hover {
+ 	cursor:zoom-in;
+ }
 path { 
     stroke: black;
     stroke-width: 2;

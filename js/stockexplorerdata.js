@@ -76,7 +76,7 @@ function dataGet() {
 	addNewStockGraph(jsondata,abbr);
 	$("#"+abbr+"Label").click(stockToggle(abbr));
 	$("#"+abbr+"Remove").click(delData(abbr));
-	$("#infoTable").append("<tr class='stockRow' id="+abbr+"Row><td style='background-color:"+color+"'></td><td>"+abbr+"</td><td class='priceCell' id="+abbr+"curPrice>-</td><td id="+abbr+"PercChange>-</td><td id="+abbr+"Delta>-</td></tr>")
+	$("#infoTable").append("<tr class='stockRow' id='"+abbr+"Row'><td id='"+abbr+"ColorCell' style='background-color:"+color+"'></td><td>"+abbr+"</td><td class='priceCell' id="+abbr+"curPrice>-</td><td id="+abbr+"PercChange>-</td><td id="+abbr+"Delta>-</td></tr>")
 	d3.select("#"+abbr+"Row")
 		.on("click",function() {
 			reloadNews(abbr);
