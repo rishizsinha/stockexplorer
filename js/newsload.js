@@ -60,7 +60,7 @@ function displayNews(data) {
 				// console.log(info);
 				if (info.enrichedTitle.docSentiment.type == "positive") {
 					$("#posDocsList").append("<li><a href='"+info.url+"'>"+info["title"]+"</a></li>");
-				} else if (info.enrichedTitle.docSentiment.type == "positive") {
+				} else if (info.enrichedTitle.docSentiment.type == "negative") {
 					$("#negDocsList").append("<li><a href='"+info.url+"'>"+info["title"]+"</a></li>");
 				} else {
 					$("#neuDocsList").append("<li><a href='"+info.url+"'>"+info["title"]+"</a></li>");
